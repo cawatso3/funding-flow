@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/form";
 import { US_STATES } from "@/data/usStates";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Full name is required").max(100),
@@ -72,39 +73,41 @@ const FundingForm = ({ onSuccess }: FundingFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // Replace with your actual webhook URL
-      const webhookUrl = "https://webhook.site/your-webhook-id";
-      
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          requestedAmount: Number(data.requestedAmount),
-          monthlyRevenue: Number(data.monthlyRevenue),
-          submittedAt: new Date().toISOString(),
-        }),
+      const payload = {
+        fullName: data.fullName.trim(),
+        email: data.email.trim().toLowerCase(),
+        phone: data.phone.trim(),
+        businessName: data.businessName.trim(),
+        state: data.state,
+        requestedAmount: Number(data.requestedAmount),
+        monthlyRevenue: Number(data.monthlyRevenue),
+        useOfFunds: data.useOfFunds.trim(),
+        consent: data.consent,
+        submittedAt: new Date().toISOString(),
+      };
+
+      const { data: responseData, error } = await supabase.functions.invoke('intake-submission', {
+        body: payload,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit application");
+      if (error) {
+        console.error('Submission error:', error);
+        throw new Error(error.message || 'Failed to submit application');
       }
 
+      if (!responseData?.ok) {
+        throw new Error(responseData?.error || 'Failed to submit application');
+      }
+
+      console.log('Application submitted successfully:', responseData);
       onSuccess();
     } catch (error) {
-      // For demo purposes, we'll show success even if the webhook fails
-      // In production, you'd want to handle this differently
-      console.log("Demo mode: Showing success state");
-      onSuccess();
-      
-      // Uncomment below for production error handling:
-      // toast({
-      //   title: "Submission Error",
-      //   description: "We couldn't submit your application. Please try again.",
-      //   variant: "destructive",
-      // });
+      console.error('Form submission error:', error);
+      toast({
+        title: "Submission Error",
+        description: "We couldn't submit your application. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
