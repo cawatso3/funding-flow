@@ -1,5 +1,5 @@
 import { useState } from "react";
-import FundingForm from "@/components/FundingForm";
+import ApplicationWizard from "@/components/wizard/ApplicationWizard";
 import SuccessState from "@/components/SuccessState";
 
 const Index = () => {
@@ -14,20 +14,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8 px-4 sm:py-12">
-      <div className="max-w-lg mx-auto">
-        <div className="bg-card rounded-xl shadow-card p-6 sm:p-8">
+    <div className="min-h-screen bg-background py-6 px-4 sm:py-12">
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-card rounded-xl shadow-card p-6 sm:p-10">
           {!isSubmitted ? (
             <>
               <div className="text-center mb-8">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-foreground mb-2">
-                  Apply for Business Funding
+                  Ebiara Developer Fund Application
                 </h1>
                 <p className="text-muted-foreground text-sm sm:text-base">
-                  Complete the form below and our team will review your application.
+                  Complete the form below to apply for funding. Fields marked with * are required.
                 </p>
               </div>
-              <FundingForm onSuccess={handleSuccess} />
+              <ApplicationWizard onSuccess={handleSuccess} />
             </>
           ) : (
             <SuccessState onReset={handleReset} />
