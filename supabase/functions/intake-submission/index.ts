@@ -37,15 +37,13 @@ serve(async (req) => {
       });
     }
 
-    // Build URL with token query parameter
-    const webhookUrl = `${N8N_WEBHOOK_URL}?token=${encodeURIComponent(webhookToken)}`;
-    
     console.log('Forwarding to n8n webhook...');
     
-    const n8nResponse = await fetch(webhookUrl, {
+    const n8nResponse = await fetch(N8N_WEBHOOK_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${webhookToken}`,
       },
       body: JSON.stringify(formData),
     });
