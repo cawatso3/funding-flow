@@ -14,6 +14,8 @@ interface IntakeSubmissionPayload {
   first_name: string;
   last_name: string;
   job_title?: string;
+  business_name: string;
+  amount_requested: number;
   home_address?: string;
   home_city?: string;
   home_state?: string;

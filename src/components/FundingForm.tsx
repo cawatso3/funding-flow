@@ -91,6 +91,8 @@ const formSchema = z.object({
   first_name: z.string().min(1, "First name is required"),
   last_name: z.string().min(1, "Last name is required"),
   job_title: z.string().optional(),
+  business_name: z.string().min(1, "Business name is required"),
+  amount_requested: z.number().min(1, "Amount requested is required").max(10000000, "Amount cannot exceed $10,000,000"),
   home_address: z.string().optional(),
   home_city: z.string().optional(),
   home_state: z.string().optional(),
@@ -169,6 +171,8 @@ const FundingForm = ({ onSuccess }: FundingFormProps) => {
       first_name: "",
       last_name: "",
       job_title: "",
+      business_name: "",
+      amount_requested: 0,
       home_address: "",
       home_city: "",
       home_state: "",
@@ -415,6 +419,40 @@ const FundingForm = ({ onSuccess }: FundingFormProps) => {
                           <FormLabel>Last Name *</FormLabel>
                           <FormControl>
                             <Input placeholder="Doe" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="business_name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Business Name *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="ABC Development LLC" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="amount_requested"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Amount Requested ($) *</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              placeholder="50000" 
+                              {...field}
+                              onChange={(e) => field.onChange(Number(e.target.value))}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
