@@ -94,20 +94,8 @@ serve(async (req) => {
 
     console.log("Received intake submission:", JSON.stringify(payload, null, 2));
 
-    const webhookToken = Deno.env.get("N8N_WEBHOOK_TOKEN");
-    if (!webhookToken) {
-      console.error("N8N_WEBHOOK_TOKEN not configured");
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error: "Webhook configuration error",
-        }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        },
-      );
-    }
+    // Create Basic Auth credentials matching n8n webhook configuration
+    const credentials = btoa('ebiara:password');
 
     console.log("Forwarding to n8n webhook...");
 
@@ -115,7 +103,7 @@ serve(async (req) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${webhookToken}`,
+        Authorization: `Basic ${credentials}`,
       },
       body: JSON.stringify(payload),
     });
