@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const N8N_WEBHOOK_URL = "https://n8n.coreorangelabs.com/webhook/intake-submission";
+const N8N_WEBHOOK_URL = "https://n8n.coreorangelabs.com/webhook-test/intake-submission";
 
 // Expected payload structure matching FundingForm.tsx fields
 interface IntakeSubmissionPayload {
