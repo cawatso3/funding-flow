@@ -46,6 +46,8 @@ const ApplicationWizard = ({ onSuccess }: ApplicationWizardProps) => {
     defaultValues: {
       first_name: "",
       last_name: "",
+      business_name: "",
+      amount_requested: 0,
       job_title: "",
       home_address: "",
       home_city: "",
@@ -122,6 +124,8 @@ const ApplicationWizard = ({ onSuccess }: ApplicationWizardProps) => {
       const payload = {
         first_name: data.first_name.trim(),
         last_name: data.last_name.trim(),
+        business_name: data.business_name.trim(),
+        amount_requested: data.amount_requested,
         job_title: data.job_title?.trim() || null,
         home_address: data.home_address?.trim() || null,
         home_city: data.home_city?.trim() || null,

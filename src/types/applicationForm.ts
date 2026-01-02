@@ -8,6 +8,8 @@ const zipRegex = /^\d{5}$/;
 export const applicantInfoSchema = z.object({
   first_name: z.string().min(1, "First name is required").max(50),
   last_name: z.string().min(1, "Last name is required").max(50),
+  business_name: z.string().min(1, "Business name is required").max(100),
+  amount_requested: z.number().min(1, "Amount requested is required").max(10000000, "Amount cannot exceed $10,000,000"),
   job_title: z.string().max(100).optional().or(z.literal("")),
   home_address: z.string().max(200).optional().or(z.literal("")),
   home_city: z.string().max(100).optional().or(z.literal("")),

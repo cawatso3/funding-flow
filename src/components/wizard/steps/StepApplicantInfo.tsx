@@ -63,6 +63,42 @@ const StepApplicantInfo = ({ form }: StepApplicantInfoProps) => {
         />
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={form.control}
+          name="business_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Business Name *</FormLabel>
+              <FormControl>
+                <Input placeholder="ABC Development LLC" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="amount_requested"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount Requested ($) *</FormLabel>
+              <FormControl>
+                <Input 
+                  type="number" 
+                  placeholder="50000" 
+                  {...field}
+                  value={field.value || ""}
+                  onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : 0)}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
       <FormField
         control={form.control}
         name="job_title"
