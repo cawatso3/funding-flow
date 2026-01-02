@@ -6,7 +6,67 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const N8N_WEBHOOK_URL = "https://n8n.coreorangelabs.com/webhook-test/intake-submission";
+const N8N_WEBHOOK_URL = "https://n8n.coreorangelabs.com/webhook/intake-submission";
+
+// Expected payload structure matching FundingForm.tsx fields
+interface IntakeSubmissionPayload {
+  // Section 1: Applicant Information
+  first_name: string;
+  last_name: string;
+  job_title?: string;
+  home_address?: string;
+  home_city?: string;
+  home_state?: string;
+  home_zip_code?: string;
+  contact_email: string;
+  phone_number: string;
+  has_development_firm: "Yes" | "No";
+
+  // Section 2: Eligibility Questions
+  is_18_or_older: "Yes" | "No";
+  firm_located_detroit: "Yes" | "No";
+  legal_status_us: "Yes" | "No";
+  bankruptcy_last_24_months: "Yes" | "No";
+  adult_entertainment_firearm_payday: "Yes" | "No";
+  cannabis_related: "Yes" | "No";
+  elected_official_or_candidate: "Yes" | "No";
+  bipoc_led: "Yes" | "No";
+  previous_invest_detroit_client_or_applicant: "Yes" | "No";
+  owner_criminal_offense: "Yes" | "No";
+  outstanding_judgments_or_liens: "Yes" | "No";
+  owners_bankruptcy_last_7_years: "Yes" | "No";
+
+  // Section 3: Impact Metrics
+  detroit_resident: string;
+  ethnicity: string;
+  ethnicity_other?: string;
+  gender: string;
+  gender_self_describe?: string;
+  veteran: string;
+  immigrant_to_us: string;
+  returning_citizen: string;
+
+  // Section 4: Developer Experience
+  years_dev_experience: number;
+  years_other_experience: number;
+  projects_completed_or_in_progress: number;
+  has_project_next_12_months: "Yes" | "No";
+
+  // Section 5: Supporting Documents (file names when uploaded)
+  firm_overview_growth_strategy?: string;
+  one_pager_projects?: string;
+  team_bios_resumes?: string;
+  upcoming_project_budget_sources_uses?: string;
+  upcoming_project_development_timeline?: string;
+
+  // Section 6: Acknowledgements
+  ack_truthful: boolean;
+  ack_not_guaranteed: boolean;
+  ack_authorize_credit: boolean;
+
+  // Auto-generated
+  submitted_at: string;
+}
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -23,7 +83,14 @@ serve(async (req) => {
 
   try {
     const formData = await req.json();
-    console.log('Received form submission:', JSON.stringify(formData, null, 2));
+    
+    // Add timestamp if not present
+    const payload = {
+      ...formData,
+      submitted_at: formData.submitted_at || new Date().toISOString(),
+    };
+    
+    console.log('Received intake submission:', JSON.stringify(payload, null, 2));
 
     const webhookToken = Deno.env.get('N8N_WEBHOOK_TOKEN');
     if (!webhookToken) {
@@ -45,7 +112,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${webhookToken}`,
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     });
 
     const responseText = await n8nResponse.text();
