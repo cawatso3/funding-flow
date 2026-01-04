@@ -94,8 +94,10 @@ serve(async (req) => {
 
     console.log("Received intake submission:", JSON.stringify(payload, null, 2));
 
-    // Create Basic Auth credentials matching n8n webhook configuration
-    const credentials = btoa('ebiara:password');
+    // Create Basic Auth credentials from environment secrets
+    const username = Deno.env.get('N8N_AUTH_USERNAME') || '';
+    const password = Deno.env.get('N8N_AUTH_PASSWORD') || '';
+    const credentials = btoa(`${username}:${password}`);
 
     console.log("Forwarding to n8n webhook...");
 
