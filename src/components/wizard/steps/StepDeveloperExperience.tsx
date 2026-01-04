@@ -38,8 +38,14 @@ const StepDeveloperExperience = ({ form }: StepDeveloperExperienceProps) => {
                   min={0}
                   max={60}
                   placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  value={field.value === 0 || field.value === undefined ? '' : field.value}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 0 : Number(e.target.value);
+                    field.onChange(value);
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormDescription>Enter a number between 0 and 60</FormDescription>
@@ -62,8 +68,14 @@ const StepDeveloperExperience = ({ form }: StepDeveloperExperienceProps) => {
                   min={0}
                   max={60}
                   placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  value={field.value === 0 || field.value === undefined ? '' : field.value}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 0 : Number(e.target.value);
+                    field.onChange(value);
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormDescription>Enter a number between 0 and 60</FormDescription>
@@ -84,8 +96,14 @@ const StepDeveloperExperience = ({ form }: StepDeveloperExperienceProps) => {
                   min={0}
                   max={999}
                   placeholder="0"
-                  {...field}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
+                  value={field.value === 0 || field.value === undefined ? '' : field.value}
+                  onChange={(e) => {
+                    const value = e.target.value === '' ? 0 : Number(e.target.value);
+                    field.onChange(value);
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
                 />
               </FormControl>
               <FormDescription>Enter a number between 0 and 999</FormDescription>
